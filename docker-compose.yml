@@ -1,0 +1,16 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres-datae:/var/lib/postgresql/data
+volumes:
+  postgres-datae:
