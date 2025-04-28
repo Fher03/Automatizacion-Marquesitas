@@ -2,15 +2,26 @@
 @slot('meta')
     @vite('resources/css/app.css')
 @endslot
-    <h1>Login</h1>
-    <form method="POST" action="{{route('login')}}">
-        {{ csrfField() }}
-        <label for="username">
-            <input name="username" type="text" />
-        </label>
-        <label for="password">
-            <input name="password" type="password" />
-        </label>
-        <button type="submit">Iniciar Sesion </button>
-    </form>
+    <div class="flex flex-col gap-33 justify-center items-center w-full h-screen bg-cyan-100">
+        <h1 class="font-bold text-7xl">Marquesitas</h1>
+        <div class="flex flex-col gap-7">
+        <h1 class="font-semibold text-4xl text-center">Iniciar Sesión</h1>
+            <div class="bg-white rounded-lg border border-gray-200 border-solid px-7 py-6">
+                <form method="POST" action="{{route('login')}}">
+                    {{ csrfField() }}
+                    <div class="flex flex-col gap-2">
+                        <label for="username">
+                            Nombre
+                        </label>
+                        <input class="bg-gray-100 rounded-md p-2" name="username" type="text" required />
+                        <label for="password">
+                            Contraseña
+                        </label>
+                        <input class="bg-gray-100 rounded-md p-2" name="password" type="password" required />
+                        <button class="bg-black rounded-md text-white w-full py-2 mt-2" type="submit">Iniciar Sesión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @end
