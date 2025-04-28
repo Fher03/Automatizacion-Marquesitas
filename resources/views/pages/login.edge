@@ -1,4 +1,7 @@
 @layout.app({title: 'Login'}) 
+@slot('meta')
+    @vite('resources/css/app.css')
+@endslot
     <h1>Login</h1>
     <form method="POST" action="{{route('login')}}">
         {{ csrfField() }}
