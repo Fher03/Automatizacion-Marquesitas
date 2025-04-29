@@ -4,7 +4,9 @@ export default class OrdersController {
   /**
    * Display a list of resource
    */
-  async index({}: HttpContext) {}
+  async index({ view }: HttpContext) {
+    return view.render('pages/orders')
+  }
 
   /**
    * Display form to create a new record

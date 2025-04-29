@@ -1,0 +1,26 @@
+<nav class="flex justify-between items-center w-full px-12 h-20 bg-gray-200 shadow-xl">
+    <div>
+        <h1 class="text-2xl font-semibold transition delay-75 duration-75 ease-in-out hover:underline hover:cursor-pointer">
+            <a href="{{route('dashboard')}}">Dashboard Marquesitas</a>
+        </h1>
+    </div>
+    <div>
+        <ul class="flex items-center gap-6">
+            <li>
+                <a class="{{selected == "orders" ? "font-semibold" : "" }} hover:underline hover:cursor-pointer" href="{{ route('orders') }}">Pedidos</a>
+            </li>
+            <li>
+                <a class="{{selected == "products" ? "font-semibold" : "" }} hover:underline hover:cursor-pointer" href="{{ route('products') }}">Productos</a>
+            </li>
+            <li>
+                <a class="{{selected == "inventory" ? "font-semibold" : "" }} hover:underline hover:cursor-pointer" href="{{ route() }}">Inventario</a>
+            </li>
+            <li>
+                <form method="POST" action="{{ route('logout') }}">
+                    {{ csrfField() }}
+                <input class="bg-red-500 rounded-md text-white px-5 py-2 hover:cursor-pointer" type="submit" value="Cerrar sesion" />
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
