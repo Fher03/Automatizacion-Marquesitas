@@ -13,7 +13,7 @@
                 <a class="{{selected == "products" ? "font-semibold" : "" }} hover:underline hover:cursor-pointer" href="{{ route('products') }}">Productos</a>
             </li>
             <li>
-                <a class="{{selected == "inventory" ? "font-semibold" : "" }} hover:underline hover:cursor-pointer" href="{{ route() }}">Inventario</a>
+                <a class="{{selected == "inventory" ? "font-semibold" : "" }} hover:underline hover:cursor-pointer" href="{{ route('inventory') }}">Inventario</a>
             </li>
             <li>
                 <form method="POST" action="{{ route('logout') }}">

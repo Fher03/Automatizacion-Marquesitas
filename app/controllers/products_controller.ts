@@ -5,7 +5,7 @@ export default class ProductsController {
    * Display a list of resource
    */
   async index({ view }: HttpContext) {
-    return view.render('pages/products')
+    return view.render('pages/products/index')
   }
 
   /**
