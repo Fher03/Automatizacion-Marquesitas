@@ -6,14 +6,14 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.integer('id').notNullable()
+      table.increments('id').notNullable()
       table.string('name').notNullable()
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())
     })
 
     this.defer(async () => {
-      this.db.table('toppings').multiInsert([
+      await this.db.table('toppings').multiInsert([
         {
           id: Toppings.FRESA,
           name: 'fresa',
