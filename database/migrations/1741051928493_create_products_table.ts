@@ -7,9 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name')
-      table.float('price')
+      table.integer('price')
       table.integer('stock')
-      table.integer('topping_id').references('toppings.id')
+      table.integer('topping').references('toppings.id')
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())
     })
