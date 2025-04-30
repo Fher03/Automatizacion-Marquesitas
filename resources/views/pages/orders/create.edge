@@ -1,4 +1,27 @@
-@layout.app({title: 'Creacion Pedido'}) 
-    <h1>Formulario Creacion Pedido</h1>
-    
+@layout.app({title: 'Creacion Pedido'})
+    <nav class="flex justify-between w-full items-center px-12 h-20 bg-gray-200 shadow-xl">
+        <div>   
+            <a href="javascript:history.back()" class="btn btn-error">                <span class="icon-[tabler--arrow-left] size-4.5 shrink-0"></span>Regresar</a>
+        </div>
+        <div class="w-full">
+            <h1 class="text-2xl text-center">
+                Creacion Pedido
+            </h1>
+        </div>
+    </nav>
+    <div class="mx-auto w-4/5 mt-10">
+        <form method="POST">
+            {{ csrfField() }}
+            <div class="flex items-center justify-around">
+                <div>
+                    <label for="seller_name">Nombre del vendedor: </label>
+                    <input class="font-semibold" disabled type="text" name="seller_name" value="{{ auth.user.username }}" />
+                </div>
+                <div class="flex items-center">
+                    <label class="w-1/2" for="customer">Nombre del cliente: </label>
+                    <input class="input w-full" placeholder="Ingrese el nombre" type="text" name="customer" />
+                </div>
+            </div>
+        </form>
+    </div>
 @end
