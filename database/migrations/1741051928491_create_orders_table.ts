@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.integer('total').notNullable()
       table.string('payment_method').notNullable()
       table.string('customer_name').notNullable()
+      table.string('state').notNullable()
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())
     })

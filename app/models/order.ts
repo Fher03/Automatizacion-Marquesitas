@@ -24,6 +24,9 @@ export default class Order extends BaseModel {
   @column()
   declare customerName: string
 
+  @column()
+  declare state: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
@@ -36,6 +39,10 @@ export default class Order extends BaseModel {
   @manyToMany(() => ProductPersonalized, {
     pivotTable: 'products_orders',
     pivotColumns: ['quantity'],
+    localKey: 'id',
+    pivotForeignKey: 'order_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'product_personalized_id',
   })
   declare productPersonalized: ManyToMany<typeof ProductPersonalized>
 }

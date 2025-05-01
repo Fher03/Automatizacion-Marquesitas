@@ -23,12 +23,12 @@ export default class extends BaseSchema {
           name: 'platano',
         },
         {
-          id: Toppings.NUTELLA,
-          name: 'nutella',
-        },
-        {
           id: Toppings.NUEZ,
           name: 'nuez',
+        },
+        {
+          id: Toppings.NUTELLA,
+          name: 'nutella',
         },
       ])
     })
