@@ -1,28 +1,19 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
-
+import Order from './order.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
-import User from './user.js'
-import ProductPersonalized from './product_personalized.js'
+import ProductBase from './product_base.js'
+import Topping from './topping.js'
 
-export default class Order extends BaseModel {
+export default class ProductPersonalized extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare userId: number
-
-  @column.dateTime()
-  declare date: DateTime
+  declare productBaseId: number
 
   @column()
-  declare total: number
-
-  @column()
-  declare paymentMethod: string
-
-  @column()
-  declare customerName: string
+  declare price: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -30,12 +21,15 @@ export default class Order extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>
+  @belongsTo(() => ProductBase)
+  declare productBase: BelongsTo<typeof ProductBase>
 
-  @manyToMany(() => ProductPersonalized, {
+  @manyToMany(() => Order, {
     pivotTable: 'products_orders',
     pivotColumns: ['quantity'],
   })
-  declare productPersonalized: ManyToMany<typeof ProductPersonalized>
+  declare orders: ManyToMany<typeof Order>
+
+  @manyToMany(() => Topping)
+  declare topping: ManyToMany<typeof Topping>
 }

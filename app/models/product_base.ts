@@ -1,14 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import ProductPersonalized from './product_personalized.js'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 
-export default class Topping extends BaseModel {
+export default class ProductBase extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
   declare name: string
+
+  @column()
+  declare stock: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -16,6 +19,6 @@ export default class Topping extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @manyToMany(() => ProductPersonalized)
-  declare productPersonalized: ManyToMany<typeof ProductPersonalized>
+  @hasMany(() => ProductPersonalized)
+  declare productPersonalized: HasMany<typeof ProductPersonalized>
 }
