@@ -378,122 +378,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- row 1 -->
-                                        <tr>
-                                            <th>
-                                                <label>
-                                                    <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" aria-label="product" />
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <div class="flex items-center gap-3">
-                                                    <div class="avatar">
-                                                        <div class="bg-base-content/10 h-10 w-10 rounded-md">
-                                                            <img src="{{ asset('resources/images/marquesita.jpg') }}" alt="product image" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="text-md text-black">
-                                                            Marquesita
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="max-w-32" data-input-number>
-                                                    <div class="input items-center">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
-                                                            aria-label="Decrement button"
-                                                            data-input-number-decrement
-                                                        >
-                                                            <span class="icon-[tabler--minus] size-3.5 shrink-0"></span>
-                                                        </button>
-                                                        <input
-                                                            class="text-center"
-                                                            type="text"
-                                                            value="0"
-                                                            aria-label="Mini stacked buttons"
-                                                            data-input-number-input
-                                                            id="number-input-mini"
-                                                        />
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
-                                                            aria-label="Increment button"
-                                                            data-input-number-increment
-                                                        >
-                                                            <span class="icon-[tabler--plus] size-3.5 shrink-0"></span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                $30
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-circle btn-error btn-text btn-sm" aria-label="Action button">                                                    <span class="icon-[tabler--trash] size-5"></span></button>
-                                            </td>
-                                        </tr>
+                                        @!form.tableRows({name: 'Marquesita', img: asset('resources/images/marquesita.jpg'), price: '$30'})
                                         <!-- row 2 -->
-                                        <tr>
-                                            <th>
-                                                <label>
-                                                    <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" aria-label="product" />
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <div class="flex items-center gap-3">
-                                                    <div class="avatar">
-                                                        <div class="bg-base-content/10 h-10 w-10 rounded-md">
-                                                            <img src="{{ asset('resources/images/tostitos.jpg') }}" alt="product image" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="text-md text-black">
-                                                            Tostitos
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="max-w-32" data-input-number>
-                                                    <div class="input items-center">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
-                                                            aria-label="Decrement button"
-                                                            data-input-number-decrement
-                                                        >
-                                                            <span class="icon-[tabler--minus] size-3.5 shrink-0"></span>
-                                                        </button>
-                                                        <input
-                                                            class="text-center"
-                                                            type="text"
-                                                            value="0"
-                                                            aria-label="Mini stacked buttons"
-                                                            data-input-number-input
-                                                            id="number-input-mini"
-                                                        />
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
-                                                            aria-label="Increment button"
-                                                            data-input-number-increment
-                                                        >
-                                                            <span class="icon-[tabler--plus] size-3.5 shrink-0"></span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                $50
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-circle btn-error btn-text btn-sm" aria-label="Action button">                                                    <span class="icon-[tabler--trash] size-5"></span></button>
-                                            </td>
-                                        </tr>
+                                        @!form.tableRows({name: 'Tostitos', img: asset('resources/images/tostitos.jpg'), price: '$50'})
                                     </tbody>
                                 </table>
                             </div>
@@ -849,7 +736,7 @@
                         </select>
 
                         <div>
-                            <button class="btn btn-success" >Confirmar Pedido</button>
+                            <button class="btn btn-success">Confirmar Pedido</button>
                         </div>
                     </div>
                 </div>
