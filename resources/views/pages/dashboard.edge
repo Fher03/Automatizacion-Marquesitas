@@ -1,0 +1,22 @@
+@layout.app({ title: "Dashboard" })
+    @slot('meta')
+        <meta name="description" content="A welcome page made with EdgeJS" />
+        <script src="../node_modules/flyonui/flyonui.js">
+            
+        </script>
+    @endslot
+    @!layout.nav()
+    <div class="w-4/5 mx-auto mt-10">
+        <div class="text-2xl font-semibold">
+            <h1>
+                Hola, {{auth.user.username}}!
+            </h1>
+        </div>
+        <div class="flex flex-col items-end gap-2 mt-4">
+            <div class="mb-2">
+                <a href="{{route('orders.create')}}" class="btn btn-gradient btn-success"> Nuevo Pedido <span class="icon-[tabler--plus] size-7 shrink-0"></span></a>
+            </div>
+            @!base.table()
+        </div> 
+    </div>
+@end

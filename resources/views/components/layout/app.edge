@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        @vite(['resources/css/app.css', 'resources/js/preline.js', 'resources/js/alpine.js'])
         <title>
             {{ title || "Your default title" }}
         </title>
@@ -9,7 +10,8 @@
             {{{ await $slots.meta() }}}
         @endif
     </head>
-    <body>
+    <body class="bg-cyan-100 min-h-fit">
         {{{ await $slots.main() }}}
+        <script src="../../../../node_modules/flyonui/flyonui.js"></script>
     </body>
 </html>

@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
-
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import ProductPersonalized from './product_personalized.js'
@@ -11,9 +10,6 @@ export default class Order extends BaseModel {
 
   @column()
   declare userId: number
-
-  @column.dateTime()
-  declare date: DateTime
 
   @column()
   declare total: number

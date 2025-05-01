@@ -18,4 +18,7 @@ export default defineConfig({
       reload: ['resources/views/**/*.edge'],
     }),
   ],
+  optimizeDeps: {
+    include: ['preline'],
+  },
 })
