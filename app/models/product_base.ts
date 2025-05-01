@@ -12,13 +12,12 @@ export default class ProductBase extends BaseModel {
 
   @column()
   declare stock: number
-
-  @hasMany(() => ProductPersonalized)
-  declare productsPersonalized: HasMany<typeof ProductPersonalized>
-
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+  
+  @hasMany(() => ProductPersonalized)
+  declare productPersonalized: HasMany<typeof ProductPersonalized>
 }

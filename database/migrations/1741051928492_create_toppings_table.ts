@@ -1,4 +1,5 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
+import Toppings from '../../app/enums/toppings.js'
 
 export default class extends BaseSchema {
   protected tableName = 'toppings'
@@ -9,6 +10,27 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())
+    })
+
+    this.defer(async () => {
+      await this.db.table('toppings').multiInsert([
+        {
+          id: Toppings.FRESA,
+          name: 'fresa',
+        },
+        {
+          id: Toppings.PLATANO,
+          name: 'platano',
+        },
+        {
+          id: Toppings.NUEZ,
+          name: 'nuez',
+        },
+        {
+          id: Toppings.NUTELLA,
+          name: 'nutella',
+        },
+      ])
     })
   }
 
