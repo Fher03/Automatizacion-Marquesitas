@@ -15,7 +15,8 @@
             <div class="flex items-center justify-around">
                 <div>
                     <label for="seller_name">Nombre del vendedor: </label>
-                    <input class="font-semibold" disabled type="text" name="seller_name" value="{{ auth.user.username }}" />
+                    <input class="font-semibold" disabled type="text" value="{{ auth.user.username }}" />
+                    <input class="hidden" :value="{{auth.user.id}}" name="userId" />
                 </div>
                 <div class="flex items-center">
                     <label class="w-1/2" for="customer">Nombre del cliente: </label>
@@ -183,7 +184,7 @@
                                                         </div>
                                                         <div>
                                                             <div class="text-md text-black">
-                                                                <input name="name[]" disabled type="text" class="w-fit" :value="item.name" />
+                                                                <input name="name[]" type="text" class="w-fit" x-model="item.name" readonly/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -201,7 +202,7 @@
                                                             <input
                                                                 name="quantity[]"
                                                                 class="text-center"
-                                                                type="text"
+                                                                type="number"
                                                                 x-model="item.quantity"
                                                             />
                                                             <button
@@ -215,7 +216,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span>$</span><input name="price[]" disabled type="text" class="max-w-4" :value="item.price" />
+                                                    <span>$</span><input name="price[]" readonly type="number" class="w-10" x-model="item.price" />
                                                 </td>
                                                 <td>
                                                     <button
@@ -256,7 +257,7 @@
                     <div
                         class="flex flex-wrap gap-10 items-center justify-center  max-h-[65vh] bg-white py-7 px-5 overflow-auto"
                     >
-                        <select name="payment_method" class="select max-w-sm appearance-none" aria-label="select">
+                        <select name="paymentMethod" class="select max-w-sm appearance-none" aria-label="select">
                             <option disabled selected>
                                 --Seleccione un metodo de pago--
                             </option>

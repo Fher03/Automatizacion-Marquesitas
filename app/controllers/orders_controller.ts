@@ -1,4 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import vine from '@vinejs/vine'
+import { orderValidator, productsPersonalizedValidator } from '#validators/order'
 
 export default class OrdersController {
   /**
@@ -19,8 +21,17 @@ export default class OrdersController {
    * Handle form submission for the create action
    */
   async store({ request, response, view }: HttpContext) {
-    const data = request.all()
-    console.log(data)
+    try {
+      const order = request.only(['userId', 'customer', 'paymentMethod'])
+      const orderCompiledValidator = vine.compile(orderValidator)
+      const validatedOrder = await orderCompiledValidator.validate(order)
+      const products = request.only(['name', 'quantity', 'price'])
+      const productsCompiledValidator = vine.compile(productsPersonalizedValidator)
+      const validatedProducts = await productsCompiledValidator.validate(products)
+      console.log([validatedOrder, validatedProducts])
+    } catch (error) {
+      console.log(error)
+    }
     return view.render('pages/dashboard')
   }
 
