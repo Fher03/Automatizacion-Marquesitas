@@ -10,7 +10,7 @@
         </div>
     </nav>
     <div class="mx-auto w-4/5 mt-10" x-data="productHandler()">
-        <form method="POST" action="{{route('orders.store')}}">
+        <form method="POST" action="{{ route('orders.store') }}">
             {{ csrfField() }}
             <div class="flex items-center justify-around">
                 <div>
@@ -51,7 +51,7 @@
                                             aria-expanded="false"
                                             aria-controls="hs-slide-up-animation-modal"
                                             data-hs-overlay="#hs-slide-up-animation-modal"
-                                            @click="addName('marquesita')"
+                                            @click="startNewItem('Marquesita')"
                                         >
                                             <span class="icon-[tabler--plus] size-5"></span>
                                         </button>
@@ -98,23 +98,20 @@
                                                         </button>
                                                     </div>
                                                     <div class="p-4 overflow-y-auto">
-                                                        <form>
-                                                            {{ csrfField() }}
-                                                            <template x-if="items.length > 0">
-                                                                <template x-for="topping in ['Fresa', 'Platano', 'Nuez', 'Nutella']" :key="topping">
-                                                                    <div class="flex items-center gap-1">
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            class="checkbox checkbox-primary"
-                                                                            :value="topping"
-                                                                            :checked="items[items.length - 1].toppings.includes(topping)"
-                                                                            @change="toggleSelection(topping)"
-                                                                        />
-                                                                        <label class="label-text text-base" x-text="topping"></label>
-                                                                    </div>
-                                                                </template>
+                                                        <form x-show="currentItem">
+                                                            <template x-for="topping in toppingsList" :key="topping">
+                                                                <div class="flex items-center gap-1">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        class="checkbox checkbox-primary"
+                                                                        :value="topping"
+                                                                        :checked="currentItem?.toppings.includes(topping)"
+                                                                        @change="toggleSelection(topping)"
+                                                                    />
+                                                                    <label class="label-text text-base" x-text="topping"></label>
+                                                                </div>
                                                             </template>
-                                                        </form>
+                                                        </form>                                                        
 
                                                     </div>
                                                     <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 ">
@@ -122,7 +119,7 @@
                                                             type="button"
                                                             class="btn btn-error"
                                                             data-hs-overlay="#hs-slide-up-animation-modal"
-                                                            @click="cancel"
+                                                            @click="cancelItem"
                                                         >
                                                             Cancelar
                                               </button>
@@ -130,7 +127,7 @@
                                                             type="button"
                                                             class="btn btn-primary"
                                                             data-hs-overlay="#hs-slide-up-animation-modal"
-                                                            @click="addItem"
+                                                            @click="confirmItem"
                                                         >
                                                             Agregar
                                               </button>
@@ -155,14 +152,11 @@
                         class="flex flex-wrap flex-col gap-10 justify-between min-h-[65vh] max-h-[65vh] bg-white py-7 px-5 overflow-auto"
                     >
                         <div class="w-full">
-                            <div class="overflow-x-auto">
+                            <div class="overflow-x-auto flex flex-col justify-center text-center">
                                 <table class="table-xs table">
                                     <!-- head -->
                                     <thead>
                                         <tr>
-                                            <th>
-                                                <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" aria-label="product" />
-                                            </th>
                                             <th>
                                                 Nombre
                                             </th>
@@ -178,14 +172,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <template x-for="item in items" :key="item">
-                                            <!-- row 1 -->
+                                        <template x-for="item in items" :key="item.id">
                                             <tr>
-                                                <th>
-                                                    <label>
-                                                        <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" aria-label="product" />
-                                                    </label>
-                                                </th>
                                                 <td>
                                                     <div class="flex items-center gap-3">
                                                         <div class="avatar">
@@ -194,34 +182,31 @@
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            <div class="text-md text-black" x-text="item.name">
-                                                                
+                                                            <div class="text-md text-black">
+                                                                <input name="name[]" disabled type="text" class="w-fit" :value="item.name" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="max-w-32" data-input-number>
+                                                    <div class="max-w-32">
                                                         <div class="input items-center">
                                                             <button
                                                                 type="button"
                                                                 class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
-                                                                aria-label="Decrement button"
                                                                 @click="if(item.quantity>1) item.quantity--"
                                                             >
                                                                 <span class="icon-[tabler--minus] size-3.5 shrink-0"></span>
                                                             </button>
                                                             <input
+                                                                name="quantity[]"
                                                                 class="text-center"
                                                                 type="text"
                                                                 x-model="item.quantity"
-                                                                aria-label="Mini stacked buttons"
-                                                                id="number-input-mini"
                                                             />
                                                             <button
                                                                 type="button"
                                                                 class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
-                                                                aria-label="Increment button"
                                                                 @click="item.quantity++"
                                                             >
                                                                 <span class="icon-[tabler--plus] size-3.5 shrink-0"></span>
@@ -229,11 +214,16 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td x-text="item.price">
-                                                    
+                                                <td>
+                                                    <span>$</span><input name="price[]" disabled type="text" class="max-w-4" :value="item.price" />
                                                 </td>
                                                 <td>
-                                                    <button @click="eraseItem(item.id)" type="button" class="btn btn-circle btn-error btn-text btn-sm" aria-label="Action button">                                                        <span class="icon-[tabler--trash] size-5"></span></button>
+                                                    <button
+                                                        @click="eraseItem(item.id)"
+                                                        type="button"
+                                                        class="btn btn-circle btn-error btn-text btn-sm"
+                                                        aria-label="Action button"
+                                                    >                                                        <span class="icon-[tabler--trash] size-5"></span></button>
                                                 </td>
                                             </tr>
 
@@ -244,7 +234,7 @@
                         </div>
                         <div class="flex justify-end">
                             <h1 class="text-xl ">
-                                Total: <span class="font-semibold">$90</span>
+                                Total: $<input name="total" class="font-semibold w-10" disabled :value="total" />
                             </h1>
                         </div>
                     </div>
@@ -266,7 +256,7 @@
                     <div
                         class="flex flex-wrap gap-10 items-center justify-center  max-h-[65vh] bg-white py-7 px-5 overflow-auto"
                     >
-                        <select class="select max-w-sm appearance-none" aria-label="select">
+                        <select name="payment_method" class="select max-w-sm appearance-none" aria-label="select">
                             <option disabled selected>
                                 --Seleccione un metodo de pago--
                             </option>
@@ -291,62 +281,50 @@
         function productHandler() {
             return {
                 items: [],
-                toggleSelection(topping) {
-                    if (this.items.length === 0) {
-                        alert("Primero agrega un producto antes de seleccionar ingredientes.");
-                        return;
-                    }
-                    const actualItem = this.items[this.items.length - 1];
-                    if (!Array.isArray(actualItem.toppings)) {
-                        actualItem.toppings = [];
-                    }
-                    if (actualItem.toppings.includes(topping)) {
-                        actualItem.toppings = actualItem.toppings.filter(t => t !== topping);
-                    } else {
-                        actualItem.toppings.push(topping);
-                    }
-                    console.log(actualItem);
-                },
-                addName(name) {
-                    this.items.push({
+                currentItem: null,
+                toppingsList: [ "Fresa", "Platano", "Nuez", "Nutella" ],
+                total: 0,
+                startNewItem(name) {
+                    this.currentItem = {
                         id: this.items.length + 1,
                         name: name,
                         toppings: [],
                         price: 30,
-                        quantity: 1,
-                    });
+                        quantity: 1
+                    };
+                    console.log('inicio: ', this.items)
                 },
-                addItem() {
-                    if (this.items.length === 0) {
-                        alert("No hay ningún producto para agregar.");
-                        return;
+                toggleSelection(topping) {
+                    const toppings = this.currentItem.toppings;
+                    if (toppings.includes(topping)) {
+                        this.currentItem.toppings = toppings.filter(t => t !== topping);
+                    } else {
+                        toppings.push(topping);
                     }
-                    const actualItem = this.items[this.items.length - 1];
-                    if (!Array.isArray(actualItem.toppings)) {
-                        actualItem.toppings = [];
-                    }
-                    if (actualItem.toppings.length === 0) {
+                },
+                confirmItem() {
+                    if (this.currentItem.toppings.length === 0) {
                         alert("Debes agregar al menos un ingrediente");
-                        this.items.pop();
                         return;
                     }
-                    const toppingsQuantity = actualItem.toppings.length;
-                    let price = actualItem.price;
-                    if (toppingsQuantity > 0) {
-                        price += toppingsQuantity * 10 - 10;
-                    }
-                    actualItem.price = price;
+                    const toppingsQuantity = this.currentItem.toppings.length;
+                    this.currentItem.price += toppingsQuantity * 10 - 10;
+                    this.items.push(this.currentItem);
+                    this.total += this.currentItem.price
+                    this.currentItem = null;
+                
+                    // Limpia los checkboxes visualmente
                     setTimeout(() => {
                         document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
                     }, 0);
+                    console.log('total: ', this.total)
+                },                
+                cancelItem() {
+                    this.currentItem = null;
+                    console.log(this.currentItem)
                 },
-                cancel() {
-                    if (this.items.length > 0) {
-                        this.items.pop();
-                    }
-                },
-                eraseItem(key) {
-                    this.items.splice(key, 1)
+                eraseItem(id) {
+                    this.items = this.items.filter(item => item.id !== id);
                 }
             };
         }

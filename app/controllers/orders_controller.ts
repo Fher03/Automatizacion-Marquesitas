@@ -18,8 +18,10 @@ export default class OrdersController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request }: HttpContext) {
-    console.log('Se ejecuta')
+  async store({ request, response }: HttpContext) {
+    const data = request.all()
+    console.log(data)
+    response.redirect().back()
   }
 
   /**
