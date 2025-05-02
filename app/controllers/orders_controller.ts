@@ -18,7 +18,9 @@ export default class OrdersController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request }: HttpContext) {}
+  async store({ request }: HttpContext) {
+    console.log('Se ejecuta')
+  }
 
   /**
    * Show individual record

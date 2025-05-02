@@ -9,8 +9,8 @@
             </h1>
         </div>
     </nav>
-    <div class="mx-auto w-4/5 mt-10">
-        <form method="POST">
+    <div class="mx-auto w-4/5 mt-10" x-data="productHandler()">
+        <form method="POST" action="{{route('orders.store')}}">
             {{ csrfField() }}
             <div class="flex items-center justify-around">
                 <div>
@@ -51,6 +51,7 @@
                                             aria-expanded="false"
                                             aria-controls="hs-slide-up-animation-modal"
                                             data-hs-overlay="#hs-slide-up-animation-modal"
+                                            @click="addName('marquesita')"
                                         >
                                             <span class="icon-[tabler--plus] size-5"></span>
                                         </button>
@@ -99,241 +100,40 @@
                                                     <div class="p-4 overflow-y-auto">
                                                         <form>
                                                             {{ csrfField() }}
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Fresa </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Platano </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nuez </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nutella </label>
-                                                            </div>
+                                                            <template x-if="items.length > 0">
+                                                                <template x-for="topping in ['Fresa', 'Platano', 'Nuez', 'Nutella']" :key="topping">
+                                                                    <div class="flex items-center gap-1">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            class="checkbox checkbox-primary"
+                                                                            :value="topping"
+                                                                            :checked="items[items.length - 1].toppings.includes(topping)"
+                                                                            @change="toggleSelection(topping)"
+                                                                        />
+                                                                        <label class="label-text text-base" x-text="topping"></label>
+                                                                    </div>
+                                                                </template>
+                                                            </template>
                                                         </form>
+
                                                     </div>
                                                     <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 ">
-                                                        <button type="button" class="btn btn-error" data-hs-overlay="#hs-slide-up-animation-modal">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-error"
+                                                            data-hs-overlay="#hs-slide-up-animation-modal"
+                                                            @click="cancel"
+                                                        >
                                                             Cancelar
                                               </button>
-                                                        <button type="button" class="btn btn-primary">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-primary"
+                                                            data-hs-overlay="#hs-slide-up-animation-modal"
+                                                            @click="addItem"
+                                                        >
                                                             Agregar
                                               </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Modal End -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Card End -->
-                        <!-- Card -->
-                        <div>
-                            <div class="card w-60  sm:max-w-sm">
-                                <figure>
-                                    <img src="{{ asset('resources/images/tostitos.jpg') }}" alt="Tostitos" />
-                                </figure>
-                                <div class="card-body">
-                                    <h5 class="text-md text-black font-semibold mb-1">
-                                        Tostitos
-                                    </h5>
-                                    <p class="mb-4 text-black">
-                                        $50
-                                    </p>
-                                    <div class="card-actions">
-                                        <!-- Modal -->
-                                        <button
-                                            type="button"
-                                            class="btn btn-primary"
-                                            aria-haspopup="dialog"
-                                            aria-expanded="false"
-                                            aria-controls="hs-slide-up-animation-modal"
-                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                        >
-                                            <span class="icon-[tabler--plus] size-5"></span>
-                                        </button>
-
-                                        <div
-                                            id="hs-slide-up-animation-modal"
-                                            class="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto pointer-events-none"
-                                            role="dialog"
-                                            tabindex="-1"
-                                            aria-labelledby="hs-slide-up-animation-modal-label"
-                                        >
-                                            <div
-                                                class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-14 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto"
-                                            >
-                                                <div class="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
-                                                    <div class="flex justify-between items-center py-3 px-4 border-b border-gray-200 ">
-                                                        <h3 id="hs-slide-up-animation-modal-label" class="font-semibold text-black">
-                                                            Personalice la marquesita
-                                                        </h3>
-                                                        <button
-                                                            type="button"
-                                                            class="hs-dropup-toggle size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                                            aria-label="Close"
-                                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                                        >
-                                                            <span class="sr-only">Close</span>
-                                                            <svg
-                                                                class="shrink-0 size-4"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            >
-                                                                <path d="M18 6 6 18" />
-
-                                                                <path d="m6 6 12 12" />
-
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-4 overflow-y-auto">
-                                                        <form>
-                                                            {{ csrfField() }}
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Fresa </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Platano </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nuez </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nutella </label>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 ">
-                                                        <button type="button" class="btn btn-error" data-hs-overlay="#hs-slide-up-animation-modal">
-                                                            Cancelar
-                                                                  </button>
-                                                        <button type="button" class="btn btn-primary">
-                                                            Agregar
-                                                                  </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Modal End -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Card End -->
-                        <!-- Card -->
-                        <div>
-                            <div class="card w-60  sm:max-w-sm">
-                                <figure>
-                                    <img src="{{ asset('resources/images/marquesita.jpg') }}" alt="Marquesita" />
-                                </figure>
-                                <div class="card-body">
-                                    <h5 class="text-md text-black font-semibold mb-1">
-                                        Marquesita
-                                    </h5>
-                                    <p class="mb-4 text-black">
-                                        $30
-                                    </p>
-                                    <div class="card-actions">
-                                        <!-- Modal -->
-                                        <button
-                                            type="button"
-                                            class="btn btn-primary"
-                                            aria-haspopup="dialog"
-                                            aria-expanded="false"
-                                            aria-controls="hs-slide-up-animation-modal"
-                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                        >
-                                            <span class="icon-[tabler--plus] size-5"></span>
-                                        </button>
-
-                                        <div
-                                            id="hs-slide-up-animation-modal"
-                                            class="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto pointer-events-none"
-                                            role="dialog"
-                                            tabindex="-1"
-                                            aria-labelledby="hs-slide-up-animation-modal-label"
-                                        >
-                                            <div
-                                                class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-14 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto"
-                                            >
-                                                <div class="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
-                                                    <div class="flex justify-between items-center py-3 px-4 border-b border-gray-200 ">
-                                                        <h3 id="hs-slide-up-animation-modal-label" class="font-semibold text-black">
-                                                            Personalice la marquesita
-                                                        </h3>
-                                                        <button
-                                                            type="button"
-                                                            class="hs-dropup-toggle size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                                            aria-label="Close"
-                                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                                        >
-                                                            <span class="sr-only">Close</span>
-                                                            <svg
-                                                                class="shrink-0 size-4"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            >
-                                                                <path d="M18 6 6 18" />
-
-                                                                <path d="m6 6 12 12" />
-
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-4 overflow-y-auto">
-                                                        <form>
-                                                            {{ csrfField() }}
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Fresa </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Platano </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nuez </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nutella </label>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 ">
-                                                        <button type="button" class="btn btn-error" data-hs-overlay="#hs-slide-up-animation-modal">
-                                                            Cancelar
-                                                                                          </button>
-                                                        <button type="button" class="btn btn-primary">
-                                                            Agregar
-                                                                                          </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -352,7 +152,7 @@
                         Pedidos
                     </h1>
                     <div
-                        class="flex flex-wrap flex-col gap-10 justify-between min-h-[65vh] bg-white py-7 px-5 overflow-auto"
+                        class="flex flex-wrap flex-col gap-10 justify-between min-h-[65vh] max-h-[65vh] bg-white py-7 px-5 overflow-auto"
                     >
                         <div class="w-full">
                             <div class="overflow-x-auto">
@@ -370,17 +170,74 @@
                                                 Cantidad
                                             </th>
                                             <th>
-                                                Price
+                                                Precio
                                             </th>
                                             <th>
-                                                Action
+                                                Accion
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @!form.tableRows({name: 'Marquesita', img: asset('resources/images/marquesita.jpg'), price: '$30'})
-                                        <!-- row 2 -->
-                                        @!form.tableRows({name: 'Tostitos', img: asset('resources/images/tostitos.jpg'), price: '$50'})
+                                        <template x-for="item in items" :key="item">
+                                            <!-- row 1 -->
+                                            <tr>
+                                                <th>
+                                                    <label>
+                                                        <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" aria-label="product" />
+                                                    </label>
+                                                </th>
+                                                <td>
+                                                    <div class="flex items-center gap-3">
+                                                        <div class="avatar">
+                                                            <div class="bg-base-content/10 h-10 w-10 rounded-md">
+                                                                <img src="{{ asset('resources/images/marquesita.jpg') }}" alt="product image" />
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <div class="text-md text-black" x-text="item.name">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="max-w-32" data-input-number>
+                                                        <div class="input items-center">
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
+                                                                aria-label="Decrement button"
+                                                                @click="if(item.quantity>1) item.quantity--"
+                                                            >
+                                                                <span class="icon-[tabler--minus] size-3.5 shrink-0"></span>
+                                                            </button>
+                                                            <input
+                                                                class="text-center"
+                                                                type="text"
+                                                                x-model="item.quantity"
+                                                                aria-label="Mini stacked buttons"
+                                                                id="number-input-mini"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
+                                                                aria-label="Increment button"
+                                                                @click="item.quantity++"
+                                                            >
+                                                                <span class="icon-[tabler--plus] size-3.5 shrink-0"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td x-text="item.price">
+                                                    
+                                                </td>
+                                                <td>
+                                                    <button @click="eraseItem(item.id)" type="button" class="btn btn-circle btn-error btn-text btn-sm" aria-label="Action button">                                                        <span class="icon-[tabler--trash] size-5"></span></button>
+                                                </td>
+                                            </tr>
+
+                                        </template>
                                     </tbody>
                                 </table>
                             </div>
@@ -398,321 +255,7 @@
                         Combinaciones
                     </h1>
                     <div class="flex flex-wrap gap-10 items-center  max-h-[65vh] bg-teal-200 py-7 px-5 overflow-auto">
-                        <!-- Card -->
-                        <div>
-                            <div class="card w-60  sm:max-w-sm">
-                                <figure>
-                                    <img src="{{ asset('resources/images/marquesita.jpg') }}" alt="Marquesita" />
-                                </figure>
-                                <div class="card-body">
-                                    <h5 class="text-md text-black font-semibold mb-1">
-                                        Marquesita
-                                    </h5>
-                                    <p class="mb-4 text-black">
-                                        $30
-                                    </p>
-                                    <div class="card-actions">
-                                        <!-- Modal -->
-                                        <button
-                                            type="button"
-                                            class="btn btn-primary"
-                                            aria-haspopup="dialog"
-                                            aria-expanded="false"
-                                            aria-controls="hs-slide-up-animation-modal"
-                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                        >
-                                            <span class="icon-[tabler--plus] size-5"></span>
-                                        </button>
-
-                                        <div
-                                            id="hs-slide-up-animation-modal"
-                                            class="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto pointer-events-none"
-                                            role="dialog"
-                                            tabindex="-1"
-                                            aria-labelledby="hs-slide-up-animation-modal-label"
-                                        >
-                                            <div
-                                                class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-14 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto"
-                                            >
-                                                <div class="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
-                                                    <div class="flex justify-between items-center py-3 px-4 border-b border-gray-200 ">
-                                                        <h3 id="hs-slide-up-animation-modal-label" class="font-semibold text-black">
-                                                            Personalice la marquesita
-                                                        </h3>
-                                                        <button
-                                                            type="button"
-                                                            class="hs-dropup-toggle size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                                            aria-label="Close"
-                                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                                        >
-                                                            <span class="sr-only">Close</span>
-                                                            <svg
-                                                                class="shrink-0 size-4"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            >
-                                                                <path d="M18 6 6 18" />
-
-                                                                <path d="m6 6 12 12" />
-
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-4 overflow-y-auto">
-                                                        <form>
-                                                            {{ csrfField() }}
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Fresa </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Platano </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nuez </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nutella </label>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 ">
-                                                        <button type="button" class="btn btn-error" data-hs-overlay="#hs-slide-up-animation-modal">
-                                                            Cancelar
-                                              </button>
-                                                        <button type="button" class="btn btn-primary">
-                                                            Agregar
-                                              </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Modal End -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Card End -->
-                        <!-- Card -->
-                        <div>
-                            <div class="card w-60  sm:max-w-sm">
-                                <figure>
-                                    <img src="{{ asset('resources/images/marquesita.jpg') }}" alt="Marquesita" />
-                                </figure>
-                                <div class="card-body">
-                                    <h5 class="text-md text-black font-semibold mb-1">
-                                        Marquesita
-                                    </h5>
-                                    <p class="mb-4 text-black">
-                                        $30
-                                    </p>
-                                    <div class="card-actions">
-                                        <!-- Modal -->
-                                        <button
-                                            type="button"
-                                            class="btn btn-primary"
-                                            aria-haspopup="dialog"
-                                            aria-expanded="false"
-                                            aria-controls="hs-slide-up-animation-modal"
-                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                        >
-                                            <span class="icon-[tabler--plus] size-5"></span>
-                                        </button>
-
-                                        <div
-                                            id="hs-slide-up-animation-modal"
-                                            class="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto pointer-events-none"
-                                            role="dialog"
-                                            tabindex="-1"
-                                            aria-labelledby="hs-slide-up-animation-modal-label"
-                                        >
-                                            <div
-                                                class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-14 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto"
-                                            >
-                                                <div class="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
-                                                    <div class="flex justify-between items-center py-3 px-4 border-b border-gray-200 ">
-                                                        <h3 id="hs-slide-up-animation-modal-label" class="font-semibold text-black">
-                                                            Personalice la marquesita
-                                                        </h3>
-                                                        <button
-                                                            type="button"
-                                                            class="hs-dropup-toggle size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                                            aria-label="Close"
-                                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                                        >
-                                                            <span class="sr-only">Close</span>
-                                                            <svg
-                                                                class="shrink-0 size-4"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            >
-                                                                <path d="M18 6 6 18" />
-
-                                                                <path d="m6 6 12 12" />
-
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-4 overflow-y-auto">
-                                                        <form>
-                                                            {{ csrfField() }}
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Fresa </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Platano </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nuez </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nutella </label>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 ">
-                                                        <button type="button" class="btn btn-error" data-hs-overlay="#hs-slide-up-animation-modal">
-                                                            Cancelar
-                                                                  </button>
-                                                        <button type="button" class="btn btn-primary">
-                                                            Agregar
-                                                                  </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Modal End -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Card End -->
-                        <!-- Card -->
-                        <div>
-                            <div class="card w-60  sm:max-w-sm">
-                                <figure>
-                                    <img src="{{ asset('resources/images/marquesita.jpg') }}" alt="Marquesita" />
-                                </figure>
-                                <div class="card-body">
-                                    <h5 class="text-md text-black font-semibold mb-1">
-                                        Marquesita
-                                    </h5>
-                                    <p class="mb-4 text-black">
-                                        $30
-                                    </p>
-                                    <div class="card-actions">
-                                        <!-- Modal -->
-                                        <button
-                                            type="button"
-                                            class="btn btn-primary"
-                                            aria-haspopup="dialog"
-                                            aria-expanded="false"
-                                            aria-controls="hs-slide-up-animation-modal"
-                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                        >
-                                            <span class="icon-[tabler--plus] size-5"></span>
-                                        </button>
-
-                                        <div
-                                            id="hs-slide-up-animation-modal"
-                                            class="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto pointer-events-none"
-                                            role="dialog"
-                                            tabindex="-1"
-                                            aria-labelledby="hs-slide-up-animation-modal-label"
-                                        >
-                                            <div
-                                                class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-14 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto"
-                                            >
-                                                <div class="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl pointer-events-auto">
-                                                    <div class="flex justify-between items-center py-3 px-4 border-b border-gray-200 ">
-                                                        <h3 id="hs-slide-up-animation-modal-label" class="font-semibold text-black">
-                                                            Personalice la marquesita
-                                                        </h3>
-                                                        <button
-                                                            type="button"
-                                                            class="hs-dropup-toggle size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                                            aria-label="Close"
-                                                            data-hs-overlay="#hs-slide-up-animation-modal"
-                                                        >
-                                                            <span class="sr-only">Close</span>
-                                                            <svg
-                                                                class="shrink-0 size-4"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            >
-                                                                <path d="M18 6 6 18" />
-
-                                                                <path d="m6 6 12 12" />
-
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-4 overflow-y-auto">
-                                                        <form>
-                                                            {{ csrfField() }}
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Fresa </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Platano </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nuez </label>
-                                                            </div>
-                                                            <div class="flex items-center gap-1">
-                                                                <input type="checkbox" class="checkbox checkbox-primary" id="checkboxPrimary" />
-                                                                <label class="label-text text-base" for="checkboxPrimary">Nutella </label>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 ">
-                                                        <button type="button" class="btn btn-error" data-hs-overlay="#hs-slide-up-animation-modal">
-                                                            Cancelar
-                                                                                          </button>
-                                                        <button type="button" class="btn btn-primary">
-                                                            Agregar
-                                                                                          </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Modal End -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Card End -->
+                        <!-- Cards -->
                     </div>
                 </div>
                 <!-- Metodo de Pago -->
@@ -736,12 +279,77 @@
                         </select>
 
                         <div>
-                            <button class="btn btn-success">Confirmar Pedido</button>
+                            <button type="submit" class="btn btn-success">Confirmar Pedido</button>
                         </div>
                     </div>
                 </div>
-
             </div>
         </form>
     </div>
+
+    <script>
+        function productHandler() {
+            return {
+                items: [],
+                toggleSelection(topping) {
+                    if (this.items.length === 0) {
+                        alert("Primero agrega un producto antes de seleccionar ingredientes.");
+                        return;
+                    }
+                    const actualItem = this.items[this.items.length - 1];
+                    if (!Array.isArray(actualItem.toppings)) {
+                        actualItem.toppings = [];
+                    }
+                    if (actualItem.toppings.includes(topping)) {
+                        actualItem.toppings = actualItem.toppings.filter(t => t !== topping);
+                    } else {
+                        actualItem.toppings.push(topping);
+                    }
+                    console.log(actualItem);
+                },
+                addName(name) {
+                    this.items.push({
+                        id: this.items.length + 1,
+                        name: name,
+                        toppings: [],
+                        price: 30,
+                        quantity: 1,
+                    });
+                },
+                addItem() {
+                    if (this.items.length === 0) {
+                        alert("No hay ningún producto para agregar.");
+                        return;
+                    }
+                    const actualItem = this.items[this.items.length - 1];
+                    if (!Array.isArray(actualItem.toppings)) {
+                        actualItem.toppings = [];
+                    }
+                    if (actualItem.toppings.length === 0) {
+                        alert("Debes agregar al menos un ingrediente");
+                        this.items.pop();
+                        return;
+                    }
+                    const toppingsQuantity = actualItem.toppings.length;
+                    let price = actualItem.price;
+                    if (toppingsQuantity > 0) {
+                        price += toppingsQuantity * 10 - 10;
+                    }
+                    actualItem.price = price;
+                    setTimeout(() => {
+                        document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
+                    }, 0);
+                },
+                cancel() {
+                    if (this.items.length > 0) {
+                        this.items.pop();
+                    }
+                },
+                eraseItem(key) {
+                    this.items.splice(key, 1)
+                }
+            };
+        }
+    </script>
+
 @end

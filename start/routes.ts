@@ -16,6 +16,7 @@ router
   .group(() => {
     router.get('/', [OrdersController, 'index']).as('orders').use(middleware.auth())
     router.get('/create', [OrdersController, 'create']).as('orders.create').use(middleware.auth())
+    router.post('/store', [OrdersController, 'store']).use(middleware.auth()).as('orders.store')
   })
   .prefix('/pedidos')
 
