@@ -194,7 +194,7 @@
                                                             <button
                                                                 type="button"
                                                                 class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
-                                                                @click="if(item.quantity>1) item.quantity--"
+                                                                @click="removeQuantity(item.id)"
                                                             >
                                                                 <span class="icon-[tabler--minus] size-3.5 shrink-0"></span>
                                                             </button>
@@ -207,7 +207,7 @@
                                                             <button
                                                                 type="button"
                                                                 class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
-                                                                @click="item.quantity++"
+                                                                @click="addQuantity(item.id)"
                                                             >
                                                                 <span class="icon-[tabler--plus] size-3.5 shrink-0"></span>
                                                             </button>
@@ -292,7 +292,6 @@
                         price: 30,
                         quantity: 1
                     };
-                    console.log('inicio: ', this.items)
                 },
                 toggleSelection(topping) {
                     const toppings = this.currentItem.toppings;
@@ -317,15 +316,32 @@
                     setTimeout(() => {
                         document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
                     }, 0);
-                    console.log('total: ', this.total)
                 },                
                 cancelItem() {
                     this.currentItem = null;
                     console.log(this.currentItem)
                 },
                 eraseItem(id) {
-                    this.items = this.items.filter(item => item.id !== id);
-                }
+                    const itemToRemove = this.items.find(item => item.id === id)
+                    if (!itemToRemove) return;
+                
+                    this.total -= itemToRemove.price * itemToRemove.quantity
+                    this.items = this.items.filter(item => item.id !== id)
+                },
+                addQuantity(id) {
+                    const item = this.items.find(item => item.id === id)
+                    if (!item) return;
+                
+                    item.quantity += 1
+                    this.total += item.price
+                },
+                removeQuantity(id) {
+                    const item = this.items.find(item => item.id === id)
+                    if (!item || item.quantity <= 1) return;
+                
+                    item.quantity -= 1
+                    this.total -= item.price
+                }                
             };
         }
     </script>
