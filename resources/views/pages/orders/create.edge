@@ -1,10 +1,17 @@
 @layout.app({title: 'Creacion Pedido'})
-    <nav class="flex justify-between w-full items-center px-12 h-20 bg-gray-200 shadow-xl">
-        <div>
-            <a href="javascript:history.back()" class="btn btn-error">                <span class="icon-[tabler--arrow-left] size-4.5 shrink-0"></span>Regresar</a>
+    @slot('meta')
+        @vite('resources/js/create_order_alert.js')
+    @endslot
+    @if(flashMessages.has('error'))
+        <div id="flash-error" data-message="{{ flashMessages.get('error') }}">
         </div>
-        <div class="w-full">
-            <h1 class="text-2xl text-center">
+    @endif
+    <nav class="flex justify-center relative w-full items-center px-12 h-20 bg-gray-200 shadow-xl">
+        <div class="absolute left-10">
+            <a href="{{route('dashboard')}}" class="btn btn-error">                <span class="icon-[tabler--arrow-left] size-4.5 shrink-0"></span>Regresar</a>
+        </div>
+        <div>
+            <h1 class="text-2xl">
                 Creacion Pedido
             </h1>
         </div>
@@ -16,11 +23,11 @@
                 <div>
                     <label for="seller_name">Nombre del vendedor: </label>
                     <input class="font-semibold" disabled type="text" value="{{ auth.user.username }}" />
-                    <input class="hidden" :value="{{auth.user.id}}" name="userId" />
+                    <input class="hidden" :value="{{ auth.user.id }}" name="userId" />
                 </div>
                 <div class="flex items-center">
                     <label class="w-1/2" for="customer">Nombre del cliente: </label>
-                    <input class="input w-full" placeholder="Ingrese el nombre" type="text" name="customer" required />
+                    <input class="input w-full" placeholder="Ingrese el nombre" type="text" name="customerName" required />
                 </div>
             </div>
             <div class="grid grid-cols-2 grid-rows-2 gap-10 my-10">
@@ -112,7 +119,7 @@
                                                                     <label class="label-text text-base" x-text="topping"></label>
                                                                 </div>
                                                             </template>
-                                                        </form>                                                        
+                                                        </form>
 
                                                     </div>
                                                     <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 ">
@@ -183,8 +190,9 @@
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            <div class="text-md text-black">
-                                                                <input name="name[]" type="text" class="w-fit" x-model="item.name" readonly/>
+                                                            <div class="text-md text-black flex gap-2">
+                                                                <input name="name[]" type="text" class="max-w-20" x-model="item.name" readonly />
+                                                                <input name="toppings[]" type="text" class="max-w-40" x-model="item.toppings" readonly/> 
                                                             </div>
                                                         </div>
                                                     </div>
@@ -199,12 +207,7 @@
                                                             >
                                                                 <span class="icon-[tabler--minus] size-3.5 shrink-0"></span>
                                                             </button>
-                                                            <input
-                                                                name="quantity[]"
-                                                                class="text-center"
-                                                                type="number"
-                                                                x-model="item.quantity"
-                                                            />
+                                                            <input name="quantity[]" class="text-center" type="text" x-model="item.quantity" />
                                                             <button
                                                                 type="button"
                                                                 class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
@@ -216,7 +219,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span>$</span><input name="price[]" readonly type="number" class="w-10" x-model="item.price" />
+                                                    <span>$</span>                                                    <input name="price[]" readonly type="text" class="w-10" x-model="item.price" />
                                                 </td>
                                                 <td>
                                                     <button
@@ -234,8 +237,8 @@
                             </div>
                         </div>
                         <div class="flex justify-end">
-                            <h1 class="text-xl ">
-                                Total: $<input name="total" class="font-semibold w-10" disabled :value="total" />
+                            <h1 class="text-2xl ">
+                                Total: $<input name="total" class="font-semibold min-w-10 max-w-20" readonly x-model="total" />
                             </h1>
                         </div>
                     </div>
@@ -310,39 +313,35 @@
                     const toppingsQuantity = this.currentItem.toppings.length;
                     this.currentItem.price += toppingsQuantity * 10 - 10;
                     this.items.push(this.currentItem);
-                    this.total += this.currentItem.price
+                    this.total += this.currentItem.price;
                     this.currentItem = null;
-                
                     // Limpia los checkboxes visualmente
                     setTimeout(() => {
                         document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
                     }, 0);
-                },                
+                },
                 cancelItem() {
                     this.currentItem = null;
-                    console.log(this.currentItem)
+                    console.log(this.currentItem);
                 },
                 eraseItem(id) {
-                    const itemToRemove = this.items.find(item => item.id === id)
+                    const itemToRemove = this.items.find(item => item.id === id);
                     if (!itemToRemove) return;
-                
-                    this.total -= itemToRemove.price * itemToRemove.quantity
-                    this.items = this.items.filter(item => item.id !== id)
+                    this.total -= itemToRemove.price * itemToRemove.quantity;
+                    this.items = this.items.filter(item => item.id !== id);
                 },
                 addQuantity(id) {
-                    const item = this.items.find(item => item.id === id)
+                    const item = this.items.find(item => item.id === id);
                     if (!item) return;
-                
-                    item.quantity += 1
-                    this.total += item.price
+                    item.quantity += 1;
+                    this.total += item.price;
                 },
                 removeQuantity(id) {
-                    const item = this.items.find(item => item.id === id)
+                    const item = this.items.find(item => item.id === id);
                     if (!item || item.quantity <= 1) return;
-                
-                    item.quantity -= 1
-                    this.total -= item.price
-                }                
+                    item.quantity -= 1;
+                    this.total -= item.price;
+                }
             };
         }
     </script>

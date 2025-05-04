@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
-export default class ProductsController {
+export default class ProductsBaseController {
   /**
    * Display a list of resource
    */

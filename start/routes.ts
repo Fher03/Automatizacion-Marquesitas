@@ -2,7 +2,7 @@ const SessionController = () => import('#controllers/sessions_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 const InventoryController = () => import('#controllers/inventory_controller')
-const ProductsController = () => import('#controllers/products_controller')
+const ProductsBaseController = () => import('#controllers/products_base_controller')
 const OrdersController = () => import('#controllers/orders_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
 
@@ -22,7 +22,7 @@ router
 
 router
   .group(() => {
-    router.get('/', [ProductsController, 'index']).as('products').use(middleware.auth())
+    router.get('/', [ProductsBaseController, 'index']).as('products').use(middleware.auth())
   })
   .prefix('/productos')
 

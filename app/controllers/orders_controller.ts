@@ -1,6 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import vine from '@vinejs/vine'
-import { orderValidator, productsPersonalizedValidator } from '#validators/order'
+import { OrderService } from '#services/order_service'
+import Order from '#models/order'
+import States from '../enums/states.js'
+import ProductsPersonalizedController from './products_base_controller.js'
+import { ProductsPersonalizedService } from '#services/products_personalized_service'
 
 export default class OrdersController {
   /**
@@ -20,19 +23,21 @@ export default class OrdersController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response, view }: HttpContext) {
+  async store({ request, response, view, session }: HttpContext) {
     try {
-      const order = request.only(['userId', 'customer', 'paymentMethod'])
-      const orderCompiledValidator = vine.compile(orderValidator)
-      const validatedOrder = await orderCompiledValidator.validate(order)
-      const products = request.only(['name', 'quantity', 'price'])
-      const productsCompiledValidator = vine.compile(productsPersonalizedValidator)
-      const validatedProducts = await productsCompiledValidator.validate(products)
-      console.log([validatedOrder, validatedProducts])
+      // const validatedOrder = await OrderService.validateOrder(
+      //   ['userId', 'customerName', 'paymentMethod', 'total'],
+      //   request
+      // )
+      // await Order.create({ ...validatedOrder, state: States.PENDING })
+      ProductsPersonalizedService.store(request)
+      session.flash('success', 'La orden se ha generado exitosamente')
+      return response.redirect().toRoute('dashboard')
     } catch (error) {
+      session.flash('error', error.message)
       console.log(error)
+      return view.render('pages/orders/create')
     }
-    return view.render('pages/dashboard')
   }
 
   /**
