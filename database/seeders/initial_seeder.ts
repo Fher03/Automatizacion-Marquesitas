@@ -32,14 +32,6 @@ export default class extends BaseSeeder {
         productPersonalizedId: 1,
         toppingId: 4,
       },
-      {
-        productPersonalizedId: 1,
-        toppingId: 3,
-      },
-      {
-        productPersonalizedId: 2,
-        toppingId: 2,
-      },
     ])
   }
 }

@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name')
       table.integer('stock')
+      table.integer('price')
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())
     })
@@ -17,10 +18,12 @@ export default class extends BaseSchema {
         {
           name: 'Marquesita',
           stock: 10,
+          price: 30,
         },
         {
           name: 'Tostitos',
           stock: 10,
+          price: 50,
         },
       ])
     })
