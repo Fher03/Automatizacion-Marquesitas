@@ -16,19 +16,19 @@ export default class extends BaseSchema {
       await this.db.table('toppings').multiInsert([
         {
           id: Toppings.FRESA,
-          name: 'fresa',
+          name: 'Fresa',
         },
         {
           id: Toppings.PLATANO,
-          name: 'platano',
+          name: 'Platano',
         },
         {
           id: Toppings.NUEZ,
-          name: 'nuez',
+          name: 'Nuez',
         },
         {
           id: Toppings.NUTELLA,
-          name: 'nutella',
+          name: 'Nutella',
         },
       ])
     })

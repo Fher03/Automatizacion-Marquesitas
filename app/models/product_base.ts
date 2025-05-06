@@ -4,6 +4,7 @@ import ProductPersonalized from './product_personalized.js'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 export default class ProductBase extends BaseModel {
+  public static table = 'products_base'
   @column({ isPrimary: true })
   declare id: number
 
@@ -12,12 +13,16 @@ export default class ProductBase extends BaseModel {
 
   @column()
   declare stock: number
+
+  @column()
+  declare price: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-  
+
   @hasMany(() => ProductPersonalized)
   declare productPersonalized: HasMany<typeof ProductPersonalized>
 }

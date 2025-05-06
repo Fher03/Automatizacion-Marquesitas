@@ -13,5 +13,5 @@ export const productsPersonalizedValidator = vine.object({
   name: vine.array(vine.string()),
   quantity: vine.array(vine.number()),
   price: vine.array(vine.number()),
-  toppings: vine.array(vine.string()),
+  toppings: vine.array(vine.string()).optional(),
 })

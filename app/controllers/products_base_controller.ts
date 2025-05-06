@@ -1,3 +1,4 @@
+import ProductBase from '#models/product_base'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProductsBaseController {
@@ -5,7 +6,10 @@ export default class ProductsBaseController {
    * Display a list of resource
    */
   async index({ view }: HttpContext) {
-    return view.render('pages/products/index')
+    const productsBase = await ProductBase.all()
+    const products = productsBase.map((product) => product.serialize())
+    console.log(products)
+    return view.render('pages/products/index', { products })
   }
 
   /**
