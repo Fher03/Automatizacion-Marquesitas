@@ -8,7 +8,6 @@ export default class ProductsBaseController {
   async index({ view }: HttpContext) {
     const productsBase = await ProductBase.all()
     const products = productsBase.map((product) => product.serialize())
-    console.log(products)
     return view.render('pages/products/index', { products })
   }
 

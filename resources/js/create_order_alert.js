@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 
+window.Swal = Swal;
 document.addEventListener('DOMContentLoaded', () => {
     const errorDiv = document.getElementById('flash-error')
     const successDiv = document.getElementById('flash-success')

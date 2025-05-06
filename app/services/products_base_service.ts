@@ -6,4 +6,9 @@ export class ProductsBaseService {
     const productsList = products.map((product) => product.serialize())
     return productsList
   }
+
+  public static async substractStock(product: ProductBase, toSubstract: number) {
+    //Editar productBase con nueva info
+    await product.merge({ stock: product.stock - toSubstract }).save()
+  }
 }
