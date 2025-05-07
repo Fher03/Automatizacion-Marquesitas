@@ -13,67 +13,70 @@
                 Hola, {{auth.user.username}}!
             </h1>
         </div>
-        <div class="flex flex-col items-end gap-2 mt-4">
+        <div class="flex {{orders.length !== 0 ? 'flex-col items-end' : 'justify-between flex-row-reverse mt-7'}} gap-2 mt-4">
             <div class="mb-2">
                 <a href="{{ route('orders.create') }}" class="btn btn-gradient btn-success">Nuevo Pedido <span class="icon-[tabler--plus] size-7 shrink-0"></span></a>
             </div>
-            <div class="w-full overflow-x-auto bg-white table-striped">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Nombre del Cliente
-                            </th>
-                            <th>
-                                Fecha
-                            </th>
-                            <th>
-                                Estado
-                            </th>
-                            <th>
-                                Total
-                            </th>
-                            <th>
-                                Acción
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @each(order in orders)
-                            <tr class="row-hover">
-                                <td>
-                                    <div class="font-semibold">
-                                        {{ order.customerName }}
-                                    </div>
-                                </td>
-                                <td>
-                                    {{ order.createdAt }}
-                                </td>
-                                <td>
-                                    <span
-                                        class="{{ order.state === 'Pendiente' ? 'badge-error': '' }} {{ order.state === 'Finalizado' ? 'badge-success' : '' }} {{ order.state === 'En progreso' ? 'badge-warning' : '' }} badge badge-soft text-xs"
-                                    >{{ order.state }}</span>
-                                </td>
-                                <td>
-                                    ${{order.total}}
-                                </td>
-                                <td>
-                                    <form method="POST" action="{{ route('orders.delete', { id: order.id }) }}">
-                                        {{ csrfField() }}
-                                        <input type="submit" class="icon-[tabler--trash] size-5 bg-red-500 hover:cursor-pointer" F/>
-                                    </form>
-                                </td>
-
+            @if(orders.length !== 0)
+                <div class="w-full overflow-x-auto bg-white table-striped">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Nombre del Cliente
+                                </th>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    Estado
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                                <th>
+                                    Acción
+                                </th>
                             </tr>
-                        @end
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @each(order in orders)
+                                <tr class="row-hover">
+                                    <td>
+                                        <div class="font-semibold">
+                                            {{ order.customerName }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{ order.createdAt }}
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="{{ order.state === 'Pendiente' ? 'badge-error': '' }} {{ order.state === 'Finalizado' ? 'badge-success' : '' }} {{ order.state === 'En progreso' ? 'badge-warning' : '' }} badge badge-soft text-xs"
+                                        >{{ order.state }}</span>
+                                    </td>
+                                    <td>
+                                        ${{order.total}}
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="{{ route('orders.delete', { id: order.id }) }}">
+                                            {{ csrfField() }}
+                                    <input type="submit" class="icon-[tabler--trash] size-5 bg-red-500 hover:cursor-pointer" />
+                                        </form>
+                                    </td>
 
+                                </tr>
+                            @end
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <h1 class="text-semibol text-xl">No hay Pedidos Pendientes</h1>
+            @end
         </div>
     </div>
-    @if(flashMessages.has('success'))
-        <div id="flash-success" data-message="{{ flashMessages.get('success') }}">
-        </div>
-    @endif
-@end
+        @if(flashMessages.has('success'))
+            <div id="flash-success" data-message="{{ flashMessages.get('success') }}">
+            </div>
+        @endif
+    @end

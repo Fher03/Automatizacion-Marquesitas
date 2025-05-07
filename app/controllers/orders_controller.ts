@@ -75,8 +75,8 @@ export default class OrdersController {
    */
   async destroy({ params, response }: HttpContext) {
     const order = await Order.findOrFail(params.id)
-    console.log(order.serialize())
-    console.log('Se elimino el registro')
+    await order.related('productPersonalized').query().delete()
+    await order.delete()
     return response.redirect().back()
   }
 }

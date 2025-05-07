@@ -16,7 +16,7 @@ router
     router.get('/', [OrdersController, 'indexPending']).as('orders').use(middleware.auth())
     router.get('/crear', [OrdersController, 'create']).as('orders.create').use(middleware.auth())
     router.post('/guardar', [OrdersController, 'store']).use(middleware.auth()).as('orders.store')
-    // router.post('/borrar/:id', [OrdersController, 'destroy']).as('orders.delete')
+    router.post('/borrar/:id', [OrdersController, 'destroy']).as('orders.delete')
   })
   .prefix('/pedidos')
 
