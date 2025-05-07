@@ -320,25 +320,45 @@
                 toppingsList: {{{toppingsList}}},
                 total: 0,
                 startNewMarquesita(name) {
-                    this.currentItem = {
-                        id: this.items.length + 1,
-                        name: name,
-                        type: "marquesita",
-                        toppings: [],
-                        price: 30,
-                        quantity: 1
-                    };
+                    if ({{{productsList[1].stock < 1}}}) {
+                        Swal.fire({
+                            title: "Advertencia",
+                            text: `No quedan mas ${name}`,
+                            icon: "warning"
+                        });
+                        return;
+                    } else {
+                        this.currentItem = {
+                            id: this.items.length + 1,
+                            name: name,
+                            type: "marquesita",
+                            toppings: [],
+                            price: 30,
+                            quantity: 1,
+                            stock: {{{productsList[1].stock}}}
+                        };
+                    }
                 },
                 startNewItem(name) {
-                    const newItem = {
-                        id: this.items.length + 1,
-                        name: name,
-                        type: "other",
-                        price: 50,
-                        quantity: 1
-                    };
-                    this.items.push(newItem);
-                    this.total += newItem.price;
+                    if ({{{productsList[0].stock < 1}}}) {
+                        Swal.fire({
+                            title: "Advertencia",
+                            text: `No quedan mas ${name}`,
+                            icon: "warning"
+                        });
+                        return;
+                    } else {
+                        const newItem = {
+                            id: this.items.length + 1,
+                            name: name,
+                            type: "other",
+                            price: 50,
+                            quantity: 1,
+                            stock: {{{productsList[0].stock}}}
+                        };
+                        this.items.push(newItem);
+                        this.total += newItem.price;
+                    }
                 },
                 toggleSelection(topping) {
                     if (!this.currentItem || this.currentItem.type !== "marquesita") return;
@@ -352,7 +372,11 @@
                 confirmItem() {
                     if (!this.currentItem || this.currentItem.type !== "marquesita") return;
                     if (this.currentItem.toppings.length === 0) {
-                        alert("Debes agregar al menos un ingrediente");
+                        Swal.fire({
+                            title: "Advertencia",
+                            text: "Debes agregar al menos un ingrediente",
+                            icon: "warning"
+                        });
                         return;
                     }
                     const toppingsQuantity = this.currentItem.toppings.length;
@@ -378,16 +402,24 @@
                 addQuantity(id) {
                     const item = this.items.find(item => item.id === id);
                     if (!item) return;
+                    const totalQuantityForProduct = this.items.filter(i => i.name === item.name).reduce((sum, i) => sum + i.quantity, 0);
+                    if (totalQuantityForProduct >= item.stock) {
+                        Swal.fire({
+                            title: "Advertencia",
+                            text: `No quedan más unidades de ${item.name}`,
+                            icon: "warning"
+                        });
+                        return;
+                    }
                     item.quantity += 1;
                     this.total += item.price;
-                    console.log(JSON.stringify(this.items));
                 },
                 removeQuantity(id) {
                     const item = this.items.find(item => item.id === id);
                     if (!item || item.quantity <= 1) return;
                     item.quantity -= 1;
                     this.total -= item.price;
-                },
+                }
             };
         }
     </script>

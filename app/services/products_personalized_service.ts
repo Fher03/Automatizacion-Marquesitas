@@ -5,6 +5,7 @@ import ProductTopping from '#models/product_topping'
 import Topping from '#models/topping'
 import { productsPersonalizedValidator } from '#validators/order'
 import vine from '@vinejs/vine'
+import { ProductsBaseService } from './products_base_service.js'
 
 interface Product {
   name: string[]
@@ -56,28 +57,36 @@ export class ProductsPersonalizedService {
       request
     )
     const products = this.manageProducts(validatedProducts)
+
     try {
-      products.map(async (product) => {
+      for (const product of products) {
         const productBase = await ProductBase.findBy('name', product.name)
+
+        if (productBase) {
+          await ProductsBaseService.substractStock(productBase, product.quantity)
+        }
+
         const personalized = await ProductPersonalized.create({
           productBaseId: productBase?.id,
           price: product.price,
         })
+
         if (product.toppings) {
-          product.toppings.map(async (topping: any) => {
+          for (const topping of product.toppings) {
             const instanceTopping = await Topping.findBy('name', topping)
             await ProductTopping.create({
               productPersonalizedId: personalized.id,
               toppingId: instanceTopping?.id,
             })
-          })
+          }
         }
+
         await ProductOrder.create({
           orderId: order.id,
           productPersonalizedId: personalized.id,
           quantity: product.quantity,
         })
-      })
+      }
     } catch (error) {
       console.log(error)
     }

@@ -1,6 +1,119 @@
-@layout.app({title: 'Inventario'}) 
-    @!layout.nav({selected: 'inventory'}) 
-    <div>
-        @!base.table()
+@layout.app({title: 'Productos'})
+    @slot('meta')
+        @vite('resources/js/alpine.js')
+    @end
+    @!layout.nav({selected: 'inventory'})
+    <div class="w-4/5 mx-auto mt-10">
+        <div class="text-2xl font-semibold">
+            <h1>
+                Inventario
+            </h1>
+        </div>
     </div>
-@end
+    <div class="flex flex-col gap-10 items-center my-15">
+
+        <div class="w-4/5 bg-white rounded-2xl">
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <!-- head -->
+                    <thead>
+                        <tr>
+                            <th class="text-md">
+                                Nombre
+                            </th>
+                            <th class="text-center text-md">
+                                Cantidad
+                            </th>
+                            <th class="text-center text-md">
+                                Precio
+                            </th>
+                            <th class="text-center text-md">
+                                Accion
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(product in products)
+                            <tr x-data="handleEdit({{ JSON.stringify(product) }})">
+                                <td>
+                                    <div class="flex items-center gap-3">
+                                        <div class="avatar">
+                                            <div class="bg-base-content/10 h-10 w-10 rounded-md">
+                                                <img src="https://cdn.flyonui.com/fy-assets/components/table/product-2.png" alt="product image" />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="text-lg text-black w-full">
+                                                {{ product.name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input items-center">
+                                        <button
+                                            type="button"
+                                            class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0"
+                                            @click="removeStock"
+                                        >
+                                            <span class="icon-[tabler--minus] size-3.5 shrink-0"></span>
+                                        </button>
+                                        <input class="text-center" type="text" readonly x-model="product.stock" />
+                                        <button type="button" class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0" @click="addStock">
+                                            <span class="icon-[tabler--plus] size-3.5 shrink-0"></span>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <div class="text-center">
+                                            ${{product.price}}
+                                        </div>
+                                    </td>
+                                    <td class="flex justify-center">
+                                        <div x-show="product.hasChangedStock">
+                                            <form method="POST" action="{{ route('inventory.edit', {id: product.id}) }}">
+                                                {{ csrfField() }}
+                                            <input name="stock" :value="product.stock" hidden/>
+                                            <input type="submit" class="icon-[tabler--check] size-7 bg-green-500 hover:cursor" />
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+            function handleEdit(product) {
+                return {
+                    product: {
+                        ...product,
+                        actualStock: product.stock,
+                        hasChangedStock: false
+                    },
+                    addStock() {
+                        this.product.hasChangedStock = true;
+                        this.product.stock++;
+                        if (this.product.actualStock === this.product.stock) {
+                            this.product.hasChangedStock = false;
+                        }
+                    },
+                    removeStock() {
+                        if (this.product.stock < 1) {
+                            this.product.stock = 0;
+                            return;
+                        }
+                        this.product.hasChangedStock = true;
+                        this.product.stock--;
+                        if (this.product.actualStock === this.product.stock) {
+                            this.product.hasChangedStock = false;
+                        }
+                    },
+                    show() {
+                        console.log(this.product);
+                    }
+                };
+            }
+        </script>
+    @end

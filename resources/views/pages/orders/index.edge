@@ -1,4 +1,62 @@
-@layout.app({title: 'Pedidos'})
-@!layout.nav({selected: 'orders'}) 
-    <h1>Pedidos</h1>
+@layout.app({ title: "Pedidos" })
+    @slot('meta')
+        <meta name="description" content="A welcome page made with EdgeJS" />
+        <script src="../node_modules/flyonui/flyonui.js">
+            
+        </script>
+        @vite('resources/js/create_order_alert.js')
+    @endslot
+    @!layout.nav()
+    <div class="w-4/5 mx-auto mt-10">
+        <div class="text-2xl font-semibold">
+            <h1>
+                Pedidos
+            </h1>
+        </div>
+        <div class="flex flex-col items-end gap-2 mt-4">
+            <div class="w-full overflow-x-auto bg-white table-striped">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nombre del Cliente
+                            </th>
+                            <th>
+                                Fecha
+                            </th>
+                            <th>
+                                Estado
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(order in orders)
+                        <tr class="row-hover">
+                            <td>
+                                <div class="font-semibold">{{order.customerName}}</div>
+                            </td>
+                            <td>
+                                {{order.createdAt}}
+                            </td>
+                            <td>
+                                <span class="{{order.state === 'Pendiente' ? 'badge-error': ''}} {{order.state === 'Finalizado' ? 'badge-success' : ''}} {{order.state === 'En progreso' ? 'badge-warning' : ''}} badge badge-soft text-xs">{{order.state}}</span>
+                            </td>
+                            <td>
+                                ${{order.total}}
+                            </td>
+                        </tr>
+                        @end
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    @if(flashMessages.has('success'))
+        <div id="flash-success" data-message="{{ flashMessages.get('success') }}">
+        </div>
+    @endif
 @end

@@ -1,12 +1,11 @@
 const SessionController = () => import('#controllers/sessions_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-const InventoryController = () => import('#controllers/inventory_controller')
 const ProductsBaseController = () => import('#controllers/products_base_controller')
 const OrdersController = () => import('#controllers/orders_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
 
-router.on('/').render('pages/dashboard').as('dashboard').use(middleware.auth())
+router.get('/', [OrdersController, 'index']).as('dashboard').use(middleware.auth())
 
 router.get('/login', [SessionController, 'index'])
 router.post('/login', [SessionController, 'store']).as('login')
@@ -14,20 +13,19 @@ router.post('/logout', [LogoutController, 'handle']).as('logout').use(middleware
 
 router
   .group(() => {
-    router.get('/', [OrdersController, 'index']).as('orders').use(middleware.auth())
-    router.get('/create', [OrdersController, 'create']).as('orders.create').use(middleware.auth())
-    router.post('/store', [OrdersController, 'store']).use(middleware.auth()).as('orders.store')
+    router.get('/', [OrdersController, 'indexPending']).as('orders').use(middleware.auth())
+    router.get('/crear', [OrdersController, 'create']).as('orders.create').use(middleware.auth())
+    router.post('/guardar', [OrdersController, 'store']).use(middleware.auth()).as('orders.store')
+    router.post('/borrar/:id', [OrdersController, 'destroy']).as('orders.delete')
   })
   .prefix('/pedidos')
 
 router
   .group(() => {
-    router.get('/', [ProductsBaseController, 'index']).as('products').use(middleware.auth())
-  })
-  .prefix('/productos')
-
-router
-  .group(() => {
-    router.get('/', [InventoryController, 'index']).as('inventory').use(middleware.auth())
+    router.get('/', [ProductsBaseController, 'index']).as('inventory').use(middleware.auth())
+    router
+      .post('/editar/:id', [ProductsBaseController, 'edit'])
+      .as('inventory.edit')
+      .use(middleware.auth())
   })
   .prefix('/inventario')
