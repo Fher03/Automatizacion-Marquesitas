@@ -11,9 +11,19 @@ export default class OrdersController {
    * Display a list of resource
    */
   async index({ view }: HttpContext) {
-    return view.render('pages/orders/index')
+    const data = await Order.query()
+      .where('state', States.PENDING)
+      .limit(9)
+      .orderBy('created_at', 'desc')
+    const orders = OrderService.serializeOrder(data)
+    return view.render('pages/dashboard', { orders })
   }
 
+  async indexPending({ view }: HttpContext) {
+    const data = await Order.query().limit(9).orderBy('created_at', 'desc')
+    const orders = OrderService.serializeOrder(data)
+    return view.render('pages/orders/index', { orders })
+  }
   /**
    * Display form to create a new record
    */
@@ -63,5 +73,10 @@ export default class OrdersController {
   /**
    * Delete record
    */
-  async destroy({ params }: HttpContext) {}
+  async destroy({ params, response }: HttpContext) {
+    const order = await Order.findOrFail(params.id)
+    console.log(order.serialize())
+    console.log('Se elimino el registro')
+    return response.redirect().back()
+  }
 }

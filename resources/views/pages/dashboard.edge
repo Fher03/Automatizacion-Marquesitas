@@ -17,11 +17,63 @@
             <div class="mb-2">
                 <a href="{{ route('orders.create') }}" class="btn btn-gradient btn-success">Nuevo Pedido <span class="icon-[tabler--plus] size-7 shrink-0"></span></a>
             </div>
-            @!base.table()
+            <div class="w-full overflow-x-auto bg-white table-striped">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nombre del Cliente
+                            </th>
+                            <th>
+                                Fecha
+                            </th>
+                            <th>
+                                Estado
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Acción
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(order in orders)
+                            <tr class="row-hover">
+                                <td>
+                                    <div class="font-semibold">
+                                        {{ order.customerName }}
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ order.createdAt }}
+                                </td>
+                                <td>
+                                    <span
+                                        class="{{ order.state === 'Pendiente' ? 'badge-error': '' }} {{ order.state === 'Finalizado' ? 'badge-success' : '' }} {{ order.state === 'En progreso' ? 'badge-warning' : '' }} badge badge-soft text-xs"
+                                    >{{ order.state }}</span>
+                                </td>
+                                <td>
+                                    ${{order.total}}
+                                </td>
+                                <td>
+                                    <form method="POST" action="{{ route('orders.delete', { id: order.id }) }}">
+                                        {{ csrfField() }}
+                                        <input type="submit" class="icon-[tabler--trash] size-5 bg-red-500 hover:cursor-pointer" F/>
+                                    </form>
+                                </td>
+
+                            </tr>
+                        @end
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
     @if(flashMessages.has('success'))
-    <div id="flash-success" data-message="{{ flashMessages.get('success') }}">
-    </div>
-@endif
+        <div id="flash-success" data-message="{{ flashMessages.get('success') }}">
+        </div>
+    @endif
 @end

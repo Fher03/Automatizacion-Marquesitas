@@ -322,9 +322,9 @@
                 startNewMarquesita(name) {
                     if ({{{productsList[1].stock < 1}}}) {
                         Swal.fire({
-                            title: "Error",
+                            title: "Advertencia",
                             text: `No quedan mas ${name}`,
-                            icon: "error"
+                            icon: "warning"
                         });
                         return;
                     } else {
@@ -342,9 +342,9 @@
                 startNewItem(name) {
                     if ({{{productsList[0].stock < 1}}}) {
                         Swal.fire({
-                            title: "Error",
+                            title: "Advertencia",
                             text: `No quedan mas ${name}`,
-                            icon: "error"
+                            icon: "warning"
                         });
                         return;
                     } else {
@@ -372,7 +372,11 @@
                 confirmItem() {
                     if (!this.currentItem || this.currentItem.type !== "marquesita") return;
                     if (this.currentItem.toppings.length === 0) {
-                        alert("Debes agregar al menos un ingrediente");
+                        Swal.fire({
+                            title: 'Advertencia',
+                            text: 'Debes agregar al menos un ingrediente',
+                            icon: 'warning',
+                        })
                         return;
                     }
                     const toppingsQuantity = this.currentItem.toppings.length;
@@ -398,18 +402,15 @@
                 addQuantity(id) {
                     const item = this.items.find(item => item.id === id);
                     if (!item) return;
-                    // Suma total de cantidades de todos los items con el mismo nombre
                     const totalQuantityForProduct = this.items.filter(i => i.name === item.name).reduce((sum, i) => sum + i.quantity, 0);
-                    // Si ya se alcanzó o superó el stock, impedir agregar más
                     if (totalQuantityForProduct >= item.stock) {
                         Swal.fire({
-                            title: "Error",
+                            title: "Advertencia",
                             text: `No quedan más unidades de ${item.name}`,
-                            icon: "error"
+                            icon: "warning"
                         });
                         return;
                     }
-                    // Agregar una unidad si aún hay stock disponible
                     item.quantity += 1;
                     this.total += item.price;
                 },

@@ -8,7 +8,6 @@ export class ProductsBaseService {
   }
 
   public static async substractStock(product: ProductBase, toSubstract: number) {
-    //Editar productBase con nueva info
     await product.merge({ stock: product.stock - toSubstract }).save()
   }
 }
