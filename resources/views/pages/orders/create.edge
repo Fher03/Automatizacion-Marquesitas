@@ -373,10 +373,10 @@
                     if (!this.currentItem || this.currentItem.type !== "marquesita") return;
                     if (this.currentItem.toppings.length === 0) {
                         Swal.fire({
-                            title: 'Advertencia',
-                            text: 'Debes agregar al menos un ingrediente',
-                            icon: 'warning',
-                        })
+                            title: "Advertencia",
+                            text: "Debes agregar al menos un ingrediente",
+                            icon: "warning"
+                        });
                         return;
                     }
                     const toppingsQuantity = this.currentItem.toppings.length;

@@ -23,5 +23,9 @@ router
 router
   .group(() => {
     router.get('/', [ProductsBaseController, 'index']).as('inventory').use(middleware.auth())
+    router
+      .post('/editar/:id', [ProductsBaseController, 'edit'])
+      .as('inventory.edit')
+      .use(middleware.auth())
   })
   .prefix('/inventario')

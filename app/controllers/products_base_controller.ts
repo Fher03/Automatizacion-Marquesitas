@@ -8,7 +8,7 @@ export default class ProductsBaseController {
   async index({ view }: HttpContext) {
     const productsBase = await ProductBase.all()
     const products = productsBase.map((product) => product.serialize())
-    return view.render('pages/products/index', { products })
+    return view.render('pages/inventory/index', { products })
   }
 
   /**
@@ -29,7 +29,16 @@ export default class ProductsBaseController {
   /**
    * Edit individual record
    */
-  async edit({ params }: HttpContext) {}
+  async edit({ params, response, request }: HttpContext) {
+    try {
+      const data = request.only(['stock'])
+      const product = await ProductBase.findOrFail(params.id)
+      product.merge({ stock: data.stock }).save()
+    } catch (error) {
+      console.log(error)
+    }
+    return response.redirect().back()
+  }
 
   /**
    * Handle form submission for the edit action
